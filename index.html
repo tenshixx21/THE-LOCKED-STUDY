@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Locked Study</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#090909;color:#201a14;font-family:Georgia,serif;
+  min-height:100vh;overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;
+  background-image:radial-gradient(#fff 1px,transparent 1px);
+  background-size:7px 7px;
+}
+header{
+  color:#d8c6a5;text-align:center;padding:25px 15px 12px;
+  letter-spacing:3px;text-transform:uppercase;
+}
+header h1{margin:0;font-size:clamp(28px,5vw,52px)}
+header p{margin:8px 0;color:#887b67;letter-spacing:1px}
+.app{max-width:1150px;margin:auto;padding:15px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{
+  background:#181818;color:#cdbb9c;border:1px solid #4c4235;padding:11px 15px;
+  cursor:pointer;font-family:inherit;border-radius:4px;
+}
+.tabs button.active,.tabs button:hover{background:#4b1717;color:#eee0c6}
+.paper{
+  display:none;position:relative;background:#c9b98f;
+  min-height:560px;padding:35px;box-shadow:8px 10px 0 #18130e,0 0 35px #000;
+  border:1px solid #77694e;
+}
+.paper.active{display:block;animation:open .25s ease}
+@keyframes open{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.paper:before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+  background:repeating-linear-gradient(0deg,transparent 0 4px,#5b4b31 5px 6px);
+}
+.stamp{
+  position:absolute;right:25px;top:22px;border:2px solid #5a1717;color:#5a1717;
+  padding:7px 12px;transform:rotate(7deg);font-weight:bold;opacity:.8;
+}
+h2{font-size:30px;margin:0 0 18px;text-transform:uppercase}
+h3{margin-top:0}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
+.card{
+  background:#bdae86;border:1px solid #756548;padding:17px;min-height:150px;
+  box-shadow:3px 4px 0 #6c5b3d;cursor:pointer;transition:.15s;
+}
+.card:hover{transform:translateY(-3px) rotate(-.3deg)}
+.card small{display:block;color:#604c31;margin-bottom:7px}
+.evidence{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px
+}
+.photo{
+  height:180px;background:#211c16;border:7px solid #ddd1ae;position:relative;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  color:#d6c7a3;text-align:center;
+}
+.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,transparent 45%,#5c1111 46%,transparent 50%);opacity:.25}
+.file{
+  padding:15px;background:#b9a77d;border-left:5px solid #601b1b;margin:12px 0;
+  cursor:pointer;
+}
+.file:hover{background:#cdbb91}
+.lockbox{
+  margin:20px 0;padding:18px;border:1px dashed #5a4b31;background:#b7a476
+}
+input{
+  background:#ded0a7;border:1px solid #5d5037;padding:10px;font-family:inherit;
+}
+button.action{
+  background:#4d1616;color:#eee1c6;border:0;padding:10px 15px;font-family:inherit;cursor:pointer
+}
+#log{
+  max-height:180px;overflow:auto;background:#15120f;color:#cbbd9e;padding:12px;
+  font-family:monospace;font-size:13px
+}
+#modal{
+  display:none;position:fixed;inset:0;background:#000b;z-index:10;
+  align-items:center;justify-content:center;padding:20px
+}
+.modalbox{
+  max-width:650px;background:#c9b98f;padding:28px;border:4px solid #59492f;
+  box-shadow:0 0 50px #000;position:relative
+}
+.close{position:absolute;right:10px;top:8px;background:none;border:0;font-size:24px;cursor:pointer}
+.clue{border-left:4px solid #671a1a;padding-left:12px;margin:12px 0}
+#ending{display:none;text-align:center}
+.red{color:#671a1a;font-weight:bold}
+footer{text-align:center;color:#685c4b;padding:18px;font-size:13px}
+@media(max-width:600px){.paper{padding:22px}.stamp{position:static;display:inline-block;margin-bottom:15px}}
+</style>
+</head>
+<body>
+<header>
+<h1>The Locked Study</h1>
+<p>CASE FILE 047 — INTERACTIVE MYSTERY</p>
+</header>
+
+<div class="app">
+<div class="tabs">
+<button class="active" onclick="showTab('case',this)">Case File</button>
+<button onclick="showTab('people',this)">People</button>
+<button onclick="showTab('evidence',this)">Evidence</button>
+<button onclick="showTab('statements',this)">Statements</button>
+<button onclick="showTab('timeline',this)">Timeline</button>
+<button onclick="showTab('solve',this)">Solve the Case</button>
+</div>
+
+<section id="case" class="paper active">
+<div class="stamp">CONFIDENTIAL</div>
+<h2>The Case</h2>
+<p>Daniel, a successful business owner, is found dead inside his study at approximately <b>10:30 PM</b>. Elena, his wife, and Lucas, their son, are the only other people known to have been inside the house.</p>
+<p>The study door is locked. There are no obvious signs that someone broke in.</p>
+<div class="lockbox">
+<b>INVESTIGATOR'S NOTE:</b>
+<p>Nothing in this case should be accepted at face value. Open every file, compare the times, and decide what the evidence actually proves.</p>
+</div>
+<h3>Final Question</h3>
+<p class="red">Did Daniel choose his own fate, or did someone else choose it for him?</p>
+</section>
+
+<section id="people" class="paper">
+<h2>People in the House</h2>
+<div class="cardgrid">
+<div class="card" onclick="openModal('Daniel','Victim. A successful business owner who owns several companies. He became increasingly secretive and worried about his business affairs.')"><h3>Daniel</h3><small>VICTIM</small>Business owner with secrets.</div>
+<div class="card" onclick="openModal('Elena','Daniel’s wife. Known as kind-hearted, honest, and trustworthy. A corporate lawyer who only takes clients she knows are innocent. Her relationship with Daniel had recently become tense.')"><h3>Elena</h3><small>WIFE</small>Corporate lawyer. Her story does not explain everything.</div>
+<div class="card" onclick="openModal('Lucas','Their son. Usually quiet and always sticks with his mother. His statement about when he fell asleep conflicts with his tablet activity.')"><h3>Lucas</h3><small>SON</small>Quiet, protective of his mother.</div>
+</div>
+</section>
+
+<section id="evidence" class="paper">
+<h2>Evidence Locker</h2>
+<div class="evidence">
+<div class="card" onclick="openModal('EVIDENCE 01 — THE LOCK','The key was found inside the study, about a meter from the door. A small scratch surrounds the keyhole, suggesting something thin was recently inserted.')"><div class="photo">PHOTO 01<br>LOCK + KEY</div><h3>The Unusual Lock</h3></div>
+<div class="card" onclick="openModal('EVIDENCE 02 — PHONE','Daniel’s last received message reads: “We need to talk tonight. Come alone.” It came from Elena’s number, although Elena denies sending it.')"><div class="photo">PHOTO 02<br>PHONE MESSAGE</div><h3>Daniel’s Phone</h3></div>
+<div class="card" onclick="openModal('EVIDENCE 03 — NOTEBOOK','Elena’s notebook contains: “If anything happens tonight, they already know why.” Beneath crossed-out writing, the words “the blue—” can be made out.')"><div class="photo">PHOTO 03<br>NOTEBOOK</div><h3>Elena’s Notebook</h3></div>
+<div class="card" onclick="openModal('EVIDENCE 04 — CLOCK','A small desk clock stopped at 9:47 PM. Elena says Daniel entered around 9:30. Lucas says he heard an argument around 10:00.')"><div class="photo">PHOTO 04<br>9:47 CLOCK</div><h3>Stopped Clock</h3></div>
+<div class="card" onclick="openModal('EVIDENCE 05 — BLUE USB','The USB was missing from Daniel’s locked desk drawer. The drawer shows signs around its keyhole similar to the study door.')"><div class="photo">PHOTO 05<br>BLUE USB</div><h3>Missing Object</h3></div>
+<div class="card" onclick="openModal('EVIDENCE 06 — WINDOW','The study window is slightly open despite the rain. There are no muddy footprints beneath it, making an outside intruder unlikely.')"><div class="photo">PHOTO 06<br>OPEN WINDOW</div><h3>The Window</h3></div>
+</div>
+<div class="file" onclick="openModal('USB CONTENTS','The blue USB contains records of secret transfers, false financial reports, hidden debts, undisclosed transactions, and business deals that caused other companies to lose enormous amounts of money.')">OPEN DIGITAL FILE: USB CONTENTS</div>
+</section>
+
+<section id="statements" class="paper">
+<h2>Statements</h2>
+<div class="card" onclick="openModal('ELENA’S STATEMENT','“I never entered Daniel’s study after we fought.”')"><h3>Elena</h3><p>Claims she never returned to the study.</p></div>
+<div class="card" onclick="openModal('LUCAS’ STATEMENT','Lucas says he fell asleep after his parents stopped fighting around 10:30 PM. His tablet was online at 10:56 PM. He says he simply woke up.')"><h3>Lucas</h3><p>Claims he was asleep, but his tablet was active later.</p></div>
+<div class="card" onclick="openModal('NEIGHBOR’S ACCOUNT','The neighbor heard Daniel yell during the argument: “If you tell them, everything is over!” Nobody initially knew who “them” meant.')"><h3>Neighbor</h3><p>Heard the argument from outside.</p></div>
+</section>
+
+<section id="timeline" class="paper">
+<h2>Timeline Board</h2>
+<div class="file"><b>~9:30 PM</b><br>Elena says Daniel entered the study.</div>
+<div class="file"><b>9:47 PM</b><br>Desk clock stops.</div>
+<div class="file"><b>~10:00 PM</b><br>Lucas says he heard his parents arguing.</div>
+<div class="file"><b>~10:30 PM</b><br>Lucas says the argument ended and he fell asleep.</div>
+<div class="file"><b>10:56 PM</b><br>Lucas’ tablet is recorded online.</div>
+<div class="file"><b>~10:30 PM</b><br>Daniel is found dead in the locked study.</div>
+<div id="log"></div>
+</section>
+
+<section id="solve" class="paper">
+<h2>Make Your Accusation</h2>
+<p>Before opening the solution, choose who you think is responsible.</p>
+<div class="cardgrid">
+<div class="card" onclick="accuse('Elena')"><h3>Accuse Elena</h3></div>
+<div class="card" onclick="accuse('Lucas')"><h3>Accuse Lucas</h3></div>
+<div class="card" onclick="accuse('Unknown Intruder')"><h3>Accuse an Intruder</h3></div>
+<div class="card" onclick="accuse('Suicide')"><h3>Choose Suicide</h3></div>
+</div>
+<div id="ending"></div>
+</section>
+</div>
+
+<div id="modal">
+<div class="modalbox">
+<button class="close" onclick="closeModal()">×</button>
+<h2 id="modalTitle"></h2><p id="modalText"></p>
+</div>
+</div>
+<footer>THE LOCKED STUDY • A fictional mystery game</footer>
+
+<script>
+let viewed=[];
+function showTab(id,btn){
+ document.querySelectorAll('.paper').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+}
+function openModal(title,text){
+ document.getElementById('modalTitle').textContent=title;
+ document.getElementById('modalText').textContent=text;
+ document.getElementById('modal').style.display='flex';
+ if(!viewed.includes(title)){viewed.push(title);updateLog(title)}
+}
+function closeModal(){document.getElementById('modal').style.display='none'}
+function updateLog(item){
+ const log=document.getElementById('log');
+ log.innerHTML += '<div>✓ FILE OPENED: '+item+'</div>';
+}
+window.onclick=e=>{if(e.target.id==='modal')closeModal()}
+
+function accuse(choice){
+ const ending=document.getElementById('ending');
+ ending.style.display='block';
+ ending.innerHTML='<hr><h2>CASE RESULT</h2><p>You chose: <b>'+choice+'</b></p>'+
+ '<p>Open the solution only when you are ready to see what happened.</p>'+
+ '<button class="action" onclick="reveal()">REVEAL THE FULL SOLUTION</button>';
+}
+function reveal(){
+ const ending=document.getElementById('ending');
+ ending.innerHTML='<hr><h2>THE SOLUTION</h2>'+
+ '<p>Daniel was murdered by Elena.</p>'+
+ '<p>Daniel had been hiding serious financial wrongdoing from other business owners. The blue USB contained evidence of secret transfers, false reports, hidden debts, and undisclosed transactions. Elena, a corporate lawyer who believed in protecting innocent people, had reached her limit after discovering what Daniel had done.</p>'+
+ '<p>During their confrontation, Elena killed Daniel using a firearm that Daniel had kept hidden. She then discarded it through the study window. The lack of muddy footprints shows that the window was not an entrance for an outside killer.</p>'+
+ '<p>The locked room was staged. Elena left the study key inside, then locked the door from outside by manipulating the lock, leaving the scratches around the keyhole. She also opened the locked desk drawer in the same way and took the blue USB because it contained the evidence against Daniel.</p>'+
+ '<p>The message from Elena’s phone was another trap. Daniel had access to her phone and sent the message to himself because he knew Elena was preparing to expose him. He had planned to make his own death look as though Elena was responsible. His plan was never completed because Elena confronted him first.</p>'+
+ '<p>The 9:47 clock does not establish the exact time of death. Lucas also lied: his tablet activity at 10:56 PM proves he was awake later than he claimed. He knew about his father’s wrongdoing and chose to protect Elena because he trusted her.</p>'+
+ '<p><b>The clues were connected:</b> the blue USB explained the motive, the scratches explained the locked room, the phone message explained the false trail, the window explained the missing weapon, and Lucas’ tablet exposed his lie.</p>'+
+ '<p class="red">Daniel intended to make his death look like Elena’s crime. In the end, it really was Elena’s crime—but not in the way Daniel had planned.</p>';
+}
+</script>
+</body>
+</html>
